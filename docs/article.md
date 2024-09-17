@@ -292,5 +292,3 @@ Depending on the selected format, the program generates the TDR in the specified
 
 By consistently utilizing TDRs and integrating them into your version control systems like Git or SVN, teams can effectively manage technical debt, ensuring the long-term health and maintainability of their software projects.
 
-For more information and access to the tool, please visit the [GitHub Repository](https://github.com/yourusername/technical-debt-generator).
-```
