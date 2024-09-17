@@ -215,6 +215,4 @@ Durch die Einbindung von TDRs in das Versionskontrollsystem bleibt die Dokumenta
 
 Indem Teams TDRs konsequent verwenden und in ihre Workflows integrieren, können sie die negativen Auswirkungen technischer Schulden minimieren und die langfristige Gesundheit und Wartbarkeit ihrer Softwareprojekte sicherstellen.
 
-Für weitere Informationen und den Zugriff auf das Werkzeug besuchen Sie bitte das [GitHub-Repository](https://github.com/yourusername/technical-debt-generator).
 
-```
