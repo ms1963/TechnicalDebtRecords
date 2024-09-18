@@ -112,15 +112,14 @@ Unser **TDR-Generator** ist ein Go-basiertes Tool, das die Erstellung von Techni
 
 ### Repository und Installation
 
-Der TDR-Generator ist auf GitHub verfügbar. Sie können das Repository [hier](https://github.com/yourusername/technical-debt-generator) finden.
+Der TDR-Generator ist auf GitHub verfügbar. Sie können das Repository [hier](https://github.com/ms1963/TechnicalDebtRecords) finden.
 
 #### Schritte zur Installation:
 
 1. **Clone das Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/technical-debt-generator.git
-   cd technical-debt-generator
+   git clone https://github.com/ms1963/TechnicalDebtRecords.git
    ```
 
 2. **Initialisiere das Go-Modul:**
@@ -195,13 +194,13 @@ Um die Nachverfolgung und Zusammenarbeit zu erleichtern, sollten TDRs in ein Ver
    git add technical_debt_record.md
    ```
 
-2. **Commit die Änderung:**
+2. **Commite die Änderung:**
 
    ```bash
    git commit -m "Add TDR für veraltete Authentifizierungsbibliothek"
    ```
 
-3. **Push die Änderung:**
+3. **Übertrage die Änderung ins Repository:**
 
    ```bash
    git push origin main
