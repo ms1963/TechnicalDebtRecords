@@ -110,14 +110,14 @@ Our **TDR Generator** is a Go-based tool that automates the creation of Technica
 
 ### Repository and Installation
 
-The TDR Generator is available on GitHub. You can access the repository [here](https://github.com/yourusername/technical-debt-generator).
+The TDR Generator is available on GitHub. You can access the repository [here](https://github.com/ms1963/TechnicalDebtRecords).
 
 #### Installation Steps:
 
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/technical-debt-generator.git
+   git clone https://github.com/ms1963/TechnicalDebtRecords.git
    cd technical-debt-generator
    ```
 
