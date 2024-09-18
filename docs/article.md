@@ -118,10 +118,9 @@ The TDR Generator is available on GitHub. You can access the repository [here](h
 
    ```bash
    git clone https://github.com/ms1963/TechnicalDebtRecords.git
-   cd technical-debt-generator
    ```
 
-2. **Initialize the Go Module:**
+2. **Initialize the Go Module :**
 
    ```bash
    go mod init technical_debt_generator
