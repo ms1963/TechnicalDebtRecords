@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////
 //
-// generate-md, (c) 2024, Michael Stal
+// generate-td, (c) 2024, Michael Stal
 // Published unter MIT license
 // and written in Go (Golang)
 //
@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strconv" // Added strconv
+	"strconv"
 	"strings"
 	"time"
 
