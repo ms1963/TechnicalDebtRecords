@@ -1,7 +1,7 @@
 # Makefile for Technical Debt Record (TDR) Generator Tool
 
 # Variables
-BINARY_NAME=generate_td
+BINARY_NAME=generate-td
 GO_FILES=generate-td.go
 
 # Default target
