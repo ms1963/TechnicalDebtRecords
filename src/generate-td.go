@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strconv"
+	"strconv" // Added strconv
 	"strings"
 	"time"
 
@@ -33,7 +33,7 @@ type TechnicalDebt struct {
 	Author         string
 	Version        string
 	Date           string
-	State          string // New field added
+	State          string
 	Relations      []string
 	Summary        string
 	Context        string
@@ -50,7 +50,7 @@ type TechnicalDebt struct {
 	Empty          bool
 }
 
-// AllowedStates defines the possible states of a technical debt record
+// AllowedStates defines the possible states of a Technical Debt Record
 var AllowedStates = []string{
 	"Identified",
 	"Analyzed",
@@ -61,69 +61,7 @@ var AllowedStates = []string{
 	"Rejected",
 }
 
-// getInput prompts the user for input and returns the entered value
-func getInput(prompt string, required bool) (string, error) {
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		fmt.Print(prompt)
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			return "", err
-		}
-		input = strings.TrimSpace(input)
-		if required && input == "" {
-			fmt.Println("This field is required. Please enter a value.")
-			continue
-		}
-		return input, nil
-	}
-}
-
-// getRelations prompts the user to enter related Technical Debt IDs
-func getRelations() ([]string, error) {
-	reader := bufio.NewReader(os.Stdin)
-	var relations []string
-	fmt.Println("\nEnter related Technical Debt IDs (leave blank to finish):")
-	for {
-		fmt.Print(" - Related TD ID: ")
-		rel, err := reader.ReadString('\n')
-		if err != nil {
-			return relations, err
-		}
-		rel = strings.TrimSpace(rel)
-		if rel == "" {
-			break
-		}
-		relations = append(relations, rel)
-	}
-	return relations, nil
-}
-
-// getState prompts the user to select a state from predefined options
-func getState() (string, error) {
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		fmt.Println("\nSelect the State of the Technical Debt:")
-		for i, state := range AllowedStates {
-			fmt.Printf("  %d) %s\n", i+1, state)
-		}
-		fmt.Print("Enter the number corresponding to the state: ")
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			return "", err
-		}
-		input = strings.TrimSpace(input)
-		// Convert input to integer
-		choice, err := strconv.Atoi(input)
-		if err != nil || choice < 1 || choice > len(AllowedStates) {
-			fmt.Println("Invalid selection. Please enter a valid number corresponding to the state.")
-			continue
-		}
-		return AllowedStates[choice-1], nil
-	}
-}
-
-// validateTechnicalDebt checks if the required fields are filled
+// validateTechnicalDebt ensures all required fields are present
 func validateTechnicalDebt(td TechnicalDebt) error {
 	if td.Title == "" {
 		return errors.New("Title is required")
@@ -141,6 +79,61 @@ func validateTechnicalDebt(td TechnicalDebt) error {
 		return errors.New("State is required")
 	}
 	return nil
+}
+
+// getInput prompts the user for input and returns the entered value
+func getInput(prompt string, required bool) (string, error) {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Print(prompt)
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			return "", err
+		}
+		input = strings.TrimSpace(input)
+		if required && input == "" {
+			fmt.Println("This field is required.")
+			continue
+		}
+		return input, nil
+	}
+}
+
+// getState prompts the user to select a state from the allowed states
+func getState() (string, error) {
+	fmt.Println("Select the State of the Technical Debt:")
+	for i, state := range AllowedStates {
+		fmt.Printf("  %d) %s\n", i+1, state)
+	}
+	for {
+		input, err := getInput("Enter the number corresponding to the state: ", true)
+		if err != nil {
+			return "", err
+		}
+		index, err := strconv.Atoi(input) // Use strconv to convert string to int
+		if err != nil || index < 1 || index > len(AllowedStates) {
+			fmt.Println("Invalid selection. Please enter a valid number.")
+			continue
+		}
+		return AllowedStates[index-1], nil
+	}
+}
+
+// getRelations prompts the user to enter related TDR IDs
+func getRelations() ([]string, error) {
+	var relations []string
+	fmt.Println("Enter related Technical Debt IDs (leave blank to finish):")
+	for {
+		rel, err := getInput(" - Related TD ID: ", false)
+		if err != nil {
+			return nil, err
+		}
+		if rel == "" {
+			break
+		}
+		relations = append(relations, rel)
+	}
+	return relations, nil
 }
 
 // generateMarkdown generates the Markdown content
@@ -164,13 +157,16 @@ func generateMarkdown(td TechnicalDebt) string {
 [Enter Author Here]
 
 ## Version
-[Enter Version Here]
+**[Enter Version Here]**
 
 ## Date
 [Enter Date Here]
 
 ## State
 [Enter State Here]
+
+## Relations
+%s
 
 ## Summary
 *A brief overview of the technical debt, explaining the problem in one or two sentences.*
@@ -188,9 +184,11 @@ func generateMarkdown(td TechnicalDebt) string {
 ## Symptoms
 *List specific signs that indicate the presence of technical debt.*
 
-## Risk Assessment
-- **Severity**: *[Enter Severity Here: Critical / High / Medium / Low]*
-- **Potential Risks**: *Potential security vulnerabilities leading to data breaches.*
+## Severity
+*[Enter Severity Here: Critical / High / Medium / Low]*
+
+## Potential Risks
+*Potential security vulnerabilities leading to data breaches.*
 
 ## Proposed Solution
 *Describe how to resolve the technical debt.*
@@ -203,9 +201,6 @@ func generateMarkdown(td TechnicalDebt) string {
 
 ## Dependencies
 *List any dependencies or blockers that need to be resolved before tackling the debt.*
-
-## Relations with Other Technical Debt Records
-%s
 
 ## Additional Notes
 *Any other relevant information or considerations.*
@@ -230,6 +225,9 @@ func generateMarkdown(td TechnicalDebt) string {
 ## State
 %s
 
+## Relations
+%s
+
 ## Summary
 %s
 
@@ -246,9 +244,11 @@ func generateMarkdown(td TechnicalDebt) string {
 ## Symptoms
 %s
 
-## Risk Assessment
-- **Severity**: %s
-- **Potential Risks**: %s
+## Severity
+%s
+
+## Potential Risks
+%s
 
 ## Proposed Solution
 %s
@@ -262,14 +262,11 @@ func generateMarkdown(td TechnicalDebt) string {
 ## Dependencies
 %s
 
-## Relations with Other Technical Debt Records
-%s
-
 ## Additional Notes
 %s
-`, td.Title, td.Author, td.Version, td.Date, td.State, td.Summary, td.Context, td.ImpactTech, td.ImpactBus,
-		td.Symptoms, td.Severity, td.PotentialRisks, td.ProposedSol, td.CostDelay, td.Effort,
-		td.Dependencies, relationsFormatted, td.Additional)
+`, td.Title, td.Author, td.Version, td.Date, td.State, relationsFormatted, td.Summary, td.Context,
+		td.ImpactTech, td.ImpactBus, td.Symptoms, td.Severity, td.PotentialRisks, td.ProposedSol,
+		td.CostDelay, td.Effort, td.Dependencies, td.Additional)
 }
 
 // generateASCII generates the Plain ASCII content
@@ -307,6 +304,10 @@ State:
 ------
 [Enter State Here]
     
+Relations:
+----------
+%s
+    
 Summary:
 --------
 *A brief overview of the technical debt, explaining the problem in one or two sentences.*
@@ -325,19 +326,22 @@ Business Impact:
     
 Symptoms:
 ---------
-*List symptoms of technical debt.*
+*List specific signs that indicate the presence of technical debt.*
     
-Risk Assessment:
+Severity:
+---------
+*[Enter Severity Here: Critical / High / Medium / Low]*
+    
+Potential Risks:
 ----------------
-- **Severity**: *[Enter Severity Here: Critical / High / Medium / Low]*
-- **Potential Risks**: *Potential security vulnerabilities leading to data breaches.*
+*Potential security vulnerabilities leading to data breaches.*
     
 Proposed Solution:
 -------------------
 *Describe how to resolve the technical debt.*
     
 Cost of Delay:
---------------
+---------------
 *Explain the consequences of delaying the resolution of the technical debt.*
     
 Effort to Resolve:
@@ -346,11 +350,7 @@ Effort to Resolve:
     
 Dependencies:
 -------------
-*List any dependencies.*
-    
-Relations with Other Technical Debt Records:
---------------------------------------------
-%s
+*List any dependencies or blockers that need to be resolved before tackling the debt.*
     
 Additional Notes:
 -----------------
@@ -361,78 +361,81 @@ Additional Notes:
 	// Normal ASCII generation
 	return fmt.Sprintf(`Technical Debt Record
 ====================
-
+    
 Title:
 ------
 %s
-
+    
 Author:
 -------
 %s
-
+    
 Version:
 --------
 %s
-
+    
 Date:
 -----
 %s
-
+    
 State:
 ------
 %s
-
+    
+Relations:
+----------
+%s
+    
 Summary:
 --------
 %s
-
-Context:
+    
+Context:
 --------
 %s
-
+    
 Impact:
 -------
 Technical Impact:
 - %s
-
+    
 Business Impact:
 - %s
-
+    
 Symptoms:
 ---------
 %s
-
-Risk Assessment:
+    
+Severity:
+---------
+%s
+    
+Potential Risks:
 ----------------
-- **Severity**: %s
-- **Potential Risks**: %s
-
+%s
+    
 Proposed Solution:
 -------------------
 %s
-
+    
 Cost of Delay:
---------------
+---------------
 %s
-
+    
 Effort to Resolve:
 -------------------
 %s
-
+    
 Dependencies:
 -------------
 %s
-
-Relations with Other Technical Debt Records:
---------------------------------------------
-%s
-
+    
 Additional Notes:
 -----------------
 %s
-`, td.Title, td.Author, td.Version, td.Date, td.State, td.Summary, td.Context, td.ImpactTech, td.ImpactBus,
-		td.Symptoms, td.Severity, td.PotentialRisks, td.ProposedSol, td.CostDelay, td.Effort,
-		td.Dependencies, relationsFormatted, td.Additional)
+`, td.Title, td.Author, td.Version, td.Date, td.State, relationsFormatted, td.Summary, td.Context,
+		td.ImpactTech, td.ImpactBus, td.Symptoms, td.Severity, td.PotentialRisks, td.ProposedSol,
+		td.CostDelay, td.Effort, td.Dependencies, td.Additional)
 }
 
 // generatePDF generates a PDF file using the gofpdf library
@@ -451,6 +454,7 @@ func generatePDF(td TechnicalDebt, filename string) error {
 	addPDFSection(pdf, "Version", td.Version)
 	addPDFSection(pdf, "Date", td.Date)
 	addPDFSection(pdf, "State", td.State)
+	addPDFSection(pdf, "Relations", strings.Join(td.Relations, ", "))
 	addPDFSection(pdf, "Summary", td.Summary)
 	addPDFSection(pdf, "Context", td.Context)
 	addPDFSection(pdf, "Technical Impact", td.ImpactTech)
@@ -462,6 +466,7 @@ func generatePDF(td TechnicalDebt, filename string) error {
 	addPDFSection(pdf, "Cost of Delay", td.CostDelay)
 	addPDFSection(pdf, "Effort to Resolve", td.Effort)
 	addPDFSection(pdf, "Dependencies", td.Dependencies)
+	addPDFSection(pdf, "Additional Notes", td.Additional)
 
 	// Output the PDF
 	err := pdf.OutputFileAndClose(filename)
@@ -486,10 +491,8 @@ func generateExcel(td TechnicalDebt, filename string) error {
 	f := excelize.NewFile()
 
 	// Create a sheet
-	sheet, err := f.NewSheet("TechnicalDebt")
-	if err != nil {
-		return err
-	}
+	sheet := "TechnicalDebt"
+	index, _ := f.NewSheet(sheet) // Corrected: In excelize v2, NewSheet returns only an int
 
 	// Set headers
 	headers := []string{
@@ -498,6 +501,7 @@ func generateExcel(td TechnicalDebt, filename string) error {
 		"Version",
 		"Date",
 		"State",
+		"Relations",
 		"Summary",
 		"Context",
 		"Technical Impact",
@@ -509,13 +513,12 @@ func generateExcel(td TechnicalDebt, filename string) error {
 		"Cost of Delay",
 		"Effort to Resolve",
 		"Dependencies",
-		"Relations with Other Technical Debt Records",
 		"Additional Notes",
 	}
 
 	for i, header := range headers {
-		cell, _ := excelize.CoordinatesToCellName(1, i+1)
-		f.SetCellValue("TechnicalDebt", cell, header)
+		cell, _ := excelize.CoordinatesToCellName(i+1, 1)
+		f.SetCellValue(sheet, cell, header)
 	}
 
 	// Set values
@@ -525,6 +528,7 @@ func generateExcel(td TechnicalDebt, filename string) error {
 		td.Version,
 		td.Date,
 		td.State,
+		strings.Join(td.Relations, ", "),
 		td.Summary,
 		td.Context,
 		td.ImpactTech,
@@ -536,25 +540,18 @@ func generateExcel(td TechnicalDebt, filename string) error {
 		td.CostDelay,
 		td.Effort,
 		td.Dependencies,
+		td.Additional,
 	}
-
-	// Relations
-	if len(td.Relations) > 0 {
-		values = append(values, strings.Join(td.Relations, ", "))
-	} else {
-		values = append(values, "None")
-	}
-
-	// Additional Notes
-	values = append(values, td.Additional)
 
 	for i, value := range values {
-		cell, _ := excelize.CoordinatesToCellName(2, i+1)
-		f.SetCellValue("TechnicalDebt", cell, value)
+		cell, _ := excelize.CoordinatesToCellName(i+1, 2)
+		f.SetCellValue(sheet, cell, value)
 	}
 
-	// Set active sheet and save the Excel file
-	f.SetActiveSheet(sheet)
+	// Set active sheet
+	f.SetActiveSheet(index)
+
+	// Save the Excel file
 	if err := f.SaveAs(filename); err != nil {
 		return fmt.Errorf("error saving Excel file: %w", err)
 	}
@@ -562,15 +559,17 @@ func generateExcel(td TechnicalDebt, filename string) error {
 }
 
 func main() {
-	fmt.Println("generate-td  (c) Michael Stal, 2024")
 	// Define command-line flags
 	formatPtr := flag.String("format", "markdown", "Output format: markdown, ascii, pdf, excel")
 	filenamePtr := flag.String("output", "", "Output filename (optional)")
 	emptyPtr := flag.Bool("empty", false, "Generate an empty template")
+	flag.Parse()
 
-	// Custom usage message
-	flag.Usage = func() {
-		usageText := `Usage: generate_td [OPTIONS]
+	// Check if help is requested
+	if len(os.Args) > 1 {
+		for _, arg := range os.Args[1:] {
+			if arg == "-h" || arg == "--help" {
+				usageText := `Usage: generate_td [OPTIONS]
 
 Generates a technical debt record in the specified format.
 
@@ -597,17 +596,7 @@ Examples:
   Show help:
         generate_td --help
 `
-		fmt.Fprintf(flag.CommandLine.Output(), usageText)
-	}
-
-	// Parse flags
-	flag.Parse()
-
-	// Check if help is requested
-	if len(os.Args) > 1 {
-		for _, arg := range os.Args[1:] {
-			if arg == "-h" || arg == "--help" {
-				flag.Usage()
+				fmt.Print(usageText)
 				return
 			}
 		}
@@ -829,4 +818,3 @@ Examples:
 
 	fmt.Printf("\nTechnical Debt record has been saved to '%s'.\n", filename)
 }
-
