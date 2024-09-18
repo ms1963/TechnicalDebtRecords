@@ -50,3 +50,10 @@ clean:
 run: build
 	@echo "Running $(BINARY_NAME)..."
 	./$(BINARY_NAME)
+
+# Test the application
+.PHONY: test
+test:
+	@echo "Running tests..."
+	go test ./...
+	@echo "Tests completed."
