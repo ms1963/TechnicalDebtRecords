@@ -112,59 +112,78 @@ func TestGenerateMarkdown(t *testing.T) {
 	expected := `# Technical Debt Record
 
 ## Title
+
 **Outdated Library**
 
 ## Author
+
 Jane Doe
 
 ## Version
+
 1.0.0
 
 ## Date
+
 2024-04-15
 
 ## State
+
 Analyzed
 
 ## Relations
+
 - [TDR-102](#)
 - [TDR-103](#)
 
 ## Summary
+
 The library is outdated and causes security vulnerabilities.
 
 ## Context
+
 Originally chosen for quick implementation.
 
 ## Impact
+
 ### Technical Impact
+
 Security risks and maintainability issues.
 
 ### Business Impact
+
 Impact on customer satisfaction.
 
 ## Symptoms
+
 Error messages related to security protocols.
 
 ## Severity
+
 High
 
 ## Potential Risks
+
 Data breaches and legal consequences.
 
 ## Proposed Solution
+
 Library replacement and implementation of 2FA.
 
 ## Cost of Delay
+
 Increased risk of security breaches.
 
 ## Effort to Resolve
+
 4 weeks and €10,000.
 
 ## Dependencies
+
 Completion of the security audit.
 
 ## Additional Notes
+
 Training for the development team.
 `
 
