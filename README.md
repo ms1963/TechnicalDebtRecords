@@ -89,7 +89,6 @@ This Go-based tool facilitates the creation of TDRs in multiple formats. Below i
 
 ### Installation
 
-1. **Clone the Repository:**
-
-   ```bash
-   git clone https://github.com/ms1963/technicalDebtRecords.git
+```bash
+go install github.com/ms1963/TechnicalDebtRecords/src@latest
+```
