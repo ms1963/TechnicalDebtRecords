@@ -308,58 +308,77 @@ func generateMarkdown(td TechnicalDebt) string {
 		return fmt.Sprintf(`# Technical Debt Record
 
 ## Title
+
 **[Enter Title Here]**
 
 ## Author
+
 [Enter Author Here]
 
 ## Version
+
 **[Enter Version Here]**
 
 ## Date
+
 [Enter Date Here]
 
 ## State
+
 [Enter State Here]
 
 ## Relations
+
 %s
 
 ## Summary
+
 *A brief overview of the technical debt, explaining the problem in one or two sentences.*
 
 ## Context
+
 *Provide the historical context and reasons why this technical debt exists.*
 
 ## Impact
+
 ### Technical Impact
+
 *Describe how the debt affects the system’s performance, scalability, or maintainability.*
 
 ### Business Impact
+
 *Explain how the debt affects the business, such as increased risk, customer dissatisfaction, or slower feature delivery.*
 
 ## Symptoms
+
 *List specific signs that indicate the presence of technical debt.*
 
 ## Severity
+
 *[Enter Severity Here: Critical / High / Medium / Low]*
 
 ## Potential Risks
+
 *Potential security vulnerabilities leading to data breaches.*
 
 ## Proposed Solution
+
 *Describe how to resolve the technical debt.*
 
 ## Cost of Delay
+
 *Explain the consequences of delaying the resolution of the technical debt.*
 
 ## Effort to Resolve
+
 *Estimate the time, resources, and effort needed to address the debt.*
 
 ## Dependencies
+
 *List any dependencies or blockers that need to be resolved before tackling the debt.*
 
 ## Additional Notes
+
 *Any other relevant information or considerations.*
 `, relationsFormatted)
 	}
@@ -368,58 +387,77 @@ func generateMarkdown(td TechnicalDebt) string {
 	return fmt.Sprintf(`# Technical Debt Record
 
 ## Title
+
 **%s**
 
 ## Author
+
 %s
 
 ## Version
+
 %s
 
 ## Date
+
 %s
 
 ## State
+
 %s
 
 ## Relations
+
 %s
 
 ## Summary
+
 %s
 
 ## Context
+
 %s
 
 ## Impact
+
 ### Technical Impact
+
 %s
 
 ### Business Impact
+
 %s
 
 ## Symptoms
+
 %s
 
 ## Severity
+
 %s
 
 ## Potential Risks
+
 %s
 
 ## Proposed Solution
+
 %s
 
 ## Cost of Delay
+
 %s
 
 ## Effort to Resolve
+
 %s
 
 ## Dependencies
+
 %s
 
 ## Additional Notes
+
 %s
 `, td.Title, td.Author, td.Version, td.Date, td.State, relationsFormatted, td.Summary, td.Context,
 		td.ImpactTech, td.ImpactBus, td.Symptoms, td.Severity, td.PotentialRisks, td.ProposedSol,
